@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.css">
 
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/fullcalendar/1.6.4/fullcalendar.min.js"></script>
 
     <title>Garde du soir</title>
 </head>
@@ -14,7 +14,14 @@
 
     <style>
         #calendar {
+            margin-bottom: 20px;
             width: 900px;
+        }
+        .romain {
+            background-color: blue;
+        }
+        .stephanie {
+            background-color: green;
         }
     </style>
 
@@ -22,8 +29,45 @@
 
     <div id="calendar"></div>
 
+    <script src="data.js"></script>
     <script>
-        $('#calendar').fullCalendar();
+        $(document).ready(function() {
+            var events = [];
+            for (var i = 0; i < gardes.length; i++) {
+                for (var m in gardes[i].months) {
+                    var month = gardes[i].months[m];
+                    for (var d = 0; d < month.length; d++) {
+                        var title, css;
+                        var add = false;
+                        switch (month[d]) {
+                            case R:
+                                add = true;
+                                title = 'Garde chez Celine & Romain';
+                                css = 'romain';
+                                break;
+                            case S:
+                                add = true;
+                                title = 'Garde chez Stephanie';
+                                css = 'stephanie';
+                                break;
+
+                        }
+                        if (add) {
+                            events.push({
+                                title: title,
+                                className: css,
+                                start: new Date(gardes[i].year, m - 1, d + 1)
+                            });
+                        }
+                    }
+                }
+            }
+            console.log('--> ' + events.length);
+
+            $('#calendar').fullCalendar({
+                events: events
+            });
+        });
     </script>
 
 </body>
